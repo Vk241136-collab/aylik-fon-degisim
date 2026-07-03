@@ -3,6 +3,6 @@
   "buildCommand": "pnpm build",
   "installCommand": "pnpm install",
   "env": {
-    "NEXT_PUBLIC_API_BASE_URL": "https://api.xn--aylkfondeiim-lyb9vxz.com/api"
+    "NEXT_PUBLIC_API_BASE_URL": "https://aylik-fon-degisim-api.onrender.com/api"
   }
 }
