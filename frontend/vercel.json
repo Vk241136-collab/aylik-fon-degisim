@@ -1,0 +1,8 @@
+{
+  "framework": "nextjs",
+  "buildCommand": "pnpm build",
+  "installCommand": "pnpm install",
+  "env": {
+    "NEXT_PUBLIC_API_BASE_URL": "https://api.xn--aylkfondeiim-lyb9vxz.com/api"
+  }
+}

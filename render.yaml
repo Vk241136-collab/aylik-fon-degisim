@@ -1,0 +1,38 @@
+services:
+  - type: web
+    name: aylik-fon-degisim-api
+    env: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: starter
+    healthCheckPath: /api/health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: aylik-fon-degisim-db
+          property: connectionString
+      - key: CORS_ORIGINS
+        value: '["https://aylıkfondeğişim.com","https://xn--aylkfondeiim-lyb9vxz.com"]'
+      - key: KAP_SYNC_ENABLED
+        value: "false"
+
+  - type: worker
+    name: aylik-fon-degisim-worker
+    env: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    dockerCommand: python -m app.worker
+    plan: starter
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: aylik-fon-degisim-db
+          property: connectionString
+      - key: KAP_SYNC_ENABLED
+        value: "false"
+      - key: KAP_POLL_INTERVAL_MINUTES
+        value: "30"
+
+databases:
+  - name: aylik-fon-degisim-db
+    plan: starter
