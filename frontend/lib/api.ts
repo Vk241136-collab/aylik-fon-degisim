@@ -1,6 +1,6 @@
 import type { Charts, ComparisonAsset, Fund, KapStatus, Report, Summary } from "@/types/api";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "https://aylik-fon-degisim-api.onrender.com/api";
+const API_BASE = "https://aylik-fon-degisim-api.onrender.com/api";
 export const PUBLIC_API_BASE = API_BASE.replace("http://backend:8000", "http://localhost:8000");
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
