@@ -51,6 +51,7 @@ export function Dashboard({ fund, funds, kapStatus, reports, summary, assets, ch
             <p className="text-sm text-zinc-600 dark:text-zinc-400">{summary.company_name}</p>
             <h1 className="text-2xl font-semibold">{summary.fund_code} · {summary.fund_name}</h1>
             <p className="mt-1 text-sm text-zinc-500">{funds.length} fon katalogda, {reports.length} rapor bu fonda kayıtlı</p>
+            {fund.fund_type ? <div className="mt-2 inline-flex rounded border border-border px-2 py-1 text-xs text-zinc-600 dark:text-zinc-300">{fund.fund_type}</div> : null}
           </div>
           <div className="flex items-center gap-2">
             <button className="inline-flex h-9 items-center gap-2 rounded-md border border-border px-3 text-sm">
@@ -175,6 +176,7 @@ function Shell({ fund, funds, kapStatus, children }: { fund: Fund; funds: Fund[]
                 >
                   <span className="block font-semibold">{item.code}</span>
                   <span className="line-clamp-2 text-xs text-zinc-500">{item.name}</span>
+                  {item.fund_type ? <span className="mt-1 block truncate text-[11px] text-teal-700 dark:text-teal-300">{item.fund_type}</span> : null}
                 </a>
               );
             })}

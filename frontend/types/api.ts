@@ -3,6 +3,9 @@ export type Fund = {
   code: string;
   name: string;
   company_id: string;
+  fund_type: string | null;
+  source: string | null;
+  kap_url: string | null;
 };
 
 export type Report = {

@@ -60,10 +60,20 @@ class KapSyncService:
                 companies[company.id] = company
             existing = next((row for row in funds.values() if row.code == item.code), None)
             if existing is None:
-                fund = Fund(code=item.code, name=item.name, company_id=company.id)
+                fund = Fund(
+                    code=item.code,
+                    name=item.name,
+                    company_id=company.id,
+                    fund_type=item.fund_type,
+                    source="KAP",
+                    kap_url=item.kap_url,
+                )
                 funds[fund.id] = fund
             else:
                 existing.name = item.name
                 existing.company_id = company.id
+                existing.fund_type = item.fund_type
+                existing.source = "KAP"
+                existing.kap_url = item.kap_url
             imported += 1
         return imported

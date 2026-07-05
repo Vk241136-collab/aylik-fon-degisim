@@ -19,6 +19,9 @@ class Fund:
     code: str
     name: str
     company_id: UUID
+    fund_type: str | None = None
+    source: str | None = None
+    kap_url: str | None = None
     id: UUID = field(default_factory=uuid4)
 
 

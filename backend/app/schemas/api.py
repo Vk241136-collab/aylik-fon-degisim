@@ -17,6 +17,9 @@ class FundCreate(BaseModel):
     code: str
     name: str
     company_id: UUID
+    fund_type: str | None = None
+    source: str | None = None
+    kap_url: str | None = None
 
 
 class FundRead(FundCreate):

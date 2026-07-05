@@ -17,6 +17,9 @@ class FundORM(UUIDMixin, TimestampMixin, Base):
     __tablename__ = "funds"
     code: Mapped[str] = mapped_column(String(20), index=True, nullable=False)
     name: Mapped[str] = mapped_column(String(255), nullable=False)
+    fund_type: Mapped[str | None] = mapped_column(String(120))
+    source: Mapped[str | None] = mapped_column(String(40))
+    kap_url: Mapped[str | None] = mapped_column(String(500))
     company_id: Mapped[PyUUID] = mapped_column(UUID(as_uuid=True), ForeignKey("portfolio_management_companies.id"), index=True)
     company = relationship("PortfolioManagementCompanyORM")
 

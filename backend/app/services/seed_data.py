@@ -88,24 +88,24 @@ companies = {company.id: company for company in [PortfolioManagementCompany(name
 company_list = list(companies.values())
 
 fund_rows = [
-    ("TLY", "TLY Hisse Senedi Yoğun Fon", company_list[0].id, "1.00"),
-    ("AFT", "Ak Portföy Yeni Teknolojiler Yabancı Hisse Senedi Fonu", company_list[1].id, "1.45"),
-    ("GMR", "Garanti Portföy Birinci Hisse Senedi Fonu", company_list[2].id, "0.82"),
-    ("TI2", "İş Portföy Hisse Senedi Fonu", company_list[3].id, "1.18"),
-    ("YAS", "Yapı Kredi Portföy Altın Fonu", company_list[4].id, "0.74"),
-    ("QNB", "QNB Portföy Para Piyasası Fonu", company_list[5].id, "2.10"),
-    ("DBH", "Değişken Borçlanma Araçları Fonu", company_list[3].id, "0.96"),
-    ("KST", "Kısa Vadeli Serbest Fon", company_list[2].id, "1.32"),
-    ("NNF", "Hisse Senedi Serbest Fon", company_list[0].id, "0.68"),
-    ("MAC", "Marmara Capital Hisse Senedi Fonu", company_list[1].id, "1.55"),
+    ("TLY", "TLY Hisse Senedi Yoğun Fon", "Hisse Senedi Fonu", company_list[0].id, "1.00"),
+    ("AFT", "Ak Portföy Yeni Teknolojiler Yabancı Hisse Senedi Fonu", "Yabancı Hisse Senedi Fonu", company_list[1].id, "1.45"),
+    ("GMR", "Garanti Portföy Birinci Hisse Senedi Fonu", "Hisse Senedi Fonu", company_list[2].id, "0.82"),
+    ("TI2", "İş Portföy Hisse Senedi Fonu", "Hisse Senedi Fonu", company_list[3].id, "1.18"),
+    ("YAS", "Yapı Kredi Portföy Altın Fonu", "Kıymetli Madenler Fonu", company_list[4].id, "0.74"),
+    ("QNB", "QNB Portföy Para Piyasası Fonu", "Para Piyasası Fonu", company_list[5].id, "2.10"),
+    ("DBH", "Değişken Borçlanma Araçları Fonu", "Borçlanma Araçları Fonu", company_list[3].id, "0.96"),
+    ("KST", "Kısa Vadeli Serbest Fon", "Serbest Fon", company_list[2].id, "1.32"),
+    ("NNF", "Hisse Senedi Serbest Fon", "Serbest Fon", company_list[0].id, "0.68"),
+    ("MAC", "Marmara Capital Hisse Senedi Fonu", "Hisse Senedi Fonu", company_list[1].id, "1.55"),
 ]
 
 funds = {}
 reports = {}
 assets_by_report = {}
 
-for code, name, company_id, scale_text in fund_rows:
-    fund = Fund(code=code, name=name, company_id=company_id)
+for code, name, fund_type, company_id, scale_text in fund_rows:
+    fund = Fund(code=code, name=name, fund_type=fund_type, company_id=company_id, source="seed")
     funds[fund.id] = fund
     may_report, june_report, may_assets, june_assets = make_report_pair(fund, code, Decimal(scale_text))
     reports[may_report.id] = may_report

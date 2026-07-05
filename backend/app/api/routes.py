@@ -65,18 +65,41 @@ def list_companies():
 
 @router.post("/funds", response_model=FundRead)
 def create_fund(payload: FundCreate):
-    fund = Fund(code=payload.code.upper(), name=payload.name, company_id=payload.company_id)
+    fund = Fund(
+        code=payload.code.upper(),
+        name=payload.name,
+        company_id=payload.company_id,
+        fund_type=payload.fund_type,
+        source=payload.source,
+        kap_url=payload.kap_url,
+    )
     funds[fund.id] = fund
     return fund
 
 
 @router.get("/funds", response_model=list[FundRead])
-def list_funds(search: str | None = None, limit: int = Query(250, ge=1, le=2000), offset: int = Query(0, ge=0)):
+def list_funds(
+    search: str | None = None,
+    fund_type: str | None = None,
+    limit: int = Query(250, ge=1, le=2000),
+    offset: int = Query(0, ge=0),
+):
     rows = sorted(funds.values(), key=lambda item: item.code)
     if search:
         needle = search.upper()
         rows = [fund for fund in rows if needle in fund.code.upper() or needle in fund.name.upper()]
+    if fund_type:
+        rows = [fund for fund in rows if (fund.fund_type or "").casefold() == fund_type.casefold()]
     return rows[offset : offset + limit]
+
+
+@router.get("/funds/types")
+def list_fund_types():
+    totals: dict[str, int] = {}
+    for fund in funds.values():
+        key = fund.fund_type or "Bilinmeyen"
+        totals[key] = totals.get(key, 0) + 1
+    return [{"fund_type": key, "count": count} for key, count in sorted(totals.items())]
 
 
 @router.post("/funds/import-catalog")
@@ -93,7 +116,18 @@ async def import_fund_catalog(file: UploadFile = File(...)):
     for row in reader:
         code = (row.get("code") or row.get("Fon Kodu") or row.get("fon_kodu") or "").strip().upper()
         name = (row.get("name") or row.get("Fon Adı") or row.get("fon_adi") or "").strip()
+        fund_type = (
+            row.get("fund_type")
+            or row.get("Fon Türü")
+            or row.get("Fon Turu")
+            or row.get("fon_turu")
+            or row.get("Kategori")
+            or row.get("category")
+            or ""
+        ).strip() or None
         company_name = (row.get("company") or row.get("Kurucu") or row.get("portfoy_yonetim_sirketi") or "Bilinmeyen Portföy").strip()
+        source = (row.get("source") or row.get("Kaynak") or "CSV").strip()
+        kap_url = (row.get("kap_url") or row.get("KAP Linki") or row.get("kap_linki") or "").strip() or None
         if not code or not name:
             continue
         company = next((item for item in companies.values() if item.name == company_name), None)
@@ -104,8 +138,11 @@ async def import_fund_catalog(file: UploadFile = File(...)):
         if existing:
             existing.name = name
             existing.company_id = company.id
+            existing.fund_type = fund_type
+            existing.source = source
+            existing.kap_url = kap_url
         else:
-            fund = Fund(code=code, name=name, company_id=company.id)
+            fund = Fund(code=code, name=name, company_id=company.id, fund_type=fund_type, source=source, kap_url=kap_url)
             funds[fund.id] = fund
         imported += 1
     return {"imported": imported, "total_funds": len(funds)}
